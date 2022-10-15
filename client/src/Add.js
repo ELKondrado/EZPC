@@ -41,7 +41,7 @@ function Add(){
                     setProductDetails(e.target.value);
                 }}/>
 
-                <button onClick={submitProduct}>Submit</button>
+                <button className="submitBtn" onClick={submitProduct}>Submit</button>
             </div>
             
         </div>
