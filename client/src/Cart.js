@@ -1,11 +1,95 @@
-import React from "react"
+import React ,{useState, useEffect} from "react"
+import Axios from 'axios'
+import { json } from "react-router-dom"
+import { urng } from 'urn-lib'
 
+let ok=0;
 function Cart(){
-    
+    const [productNames, setProductNames] = useState([])
+    const [productImages, setProductImages] = useState([])
+    const [productPrices, setProductPrices] = useState([])
+    const [productQuantity, setProductQuantity] = useState([])
+    const [tables,setTables] = useState([])
+    let tableName,tableId;
     function pay(){
         localStorage.clear();
-        window.open("http://localhost:3000/pay", "width=200,height=100");
+        window.open("http://localhost:3000/pay", "width=200, height=100");
         window.location.reload();
+    }
+
+    function recordOrders()
+    {
+        let cartItems = localStorage.getItem("productsInCart");
+        cartItems = JSON.parse(cartItems);    
+        let length = localStorage.getItem("cartNumbers");
+        length = parseInt(length);
+        
+        let pNames=[];
+        let pImages=[];
+        let pPrices=[];
+        let pQuantity=[];
+        let i=0;
+        Object.values(cartItems).map((item) => {
+            let pp = parseFloat(item.productPrice);
+            let pn = item.productName.substring(0,45);
+            let pq = parseFloat(item.inCart);
+            if(item.productName.length>45)
+            {
+              pn = pn.concat(" ...")
+            }
+            pNames[i]=pn;
+            pImages[i]=item.productImage;
+            pPrices[i]=pp;
+            pQuantity[i]=pq;
+            i++;
+          });
+        setProductNames(pNames); 
+        setProductImages(pImages);  
+        setProductPrices(pPrices);
+        setProductQuantity(pQuantity);
+        submitOrder();
+    }
+
+    
+    const submitOrder = () => {
+        
+        Axios.get('http://localhost:3001/api/getTables').then((response) => {
+            setTables(response.data);
+        })
+
+        if(tables.length!=0)
+        {
+            Axios.post("http://localhost:3001/api/insertTable",{}).then(()=>{})
+
+            Axios.get('http://localhost:3001/api/getTables').then((response) => {
+                setTables(response.data);
+            })
+
+            Object.values(tables).map((item) => {
+                tableName = item.table;
+                tableId = item.id;
+            });
+
+            Axios.post("http://localhost:3001/api/insertTableProduct",
+            {
+                tableName : tableName + tableId,
+            })
+
+            for(let i=0;i<=productNames.length;i++){
+                Axios.post("http://localhost:3001/api/insertOrder",
+                {
+                    tableName : tableName + tableId,
+                    productName : productNames[i],
+                    productImage : productImages[i],
+                    productPrice : productPrices[i],
+                    productQuantity : productQuantity[i],
+                }).then(()=>{
+                
+                })
+            }
+
+            setTimeout(pay,500)
+        }      
     }
 
     return(
@@ -68,7 +152,7 @@ function Cart(){
                         </tr>
                     </tbody>
                 </table>
-                <button className="clearcart normal" onClick={pay}>Proceed to Buy</button>
+                <button className="clearcart normal" onClick={recordOrders}>Proceed to Buy</button>
                 
             </div>
 

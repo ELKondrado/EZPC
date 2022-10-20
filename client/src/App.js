@@ -4,7 +4,8 @@ import Shop from "./Shop";
 import Product from "./Product";
 import Cart from "./Cart";
 import Add from "./Add";
-import Pay from "./Pay"
+import Pay from "./Pay";
+import Orders from "./Orders";
 import {Route,Routes,Link} from 'react-router-dom'
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route exact path="/cart" element={<Cart/>}/>
         <Route exact path="/add" element={<Add/>}/>
         <Route exact path="/pay" element={<Pay/>}/>
+        <Route exact path="/orders" element={<Orders/>}/>
       </Routes>
 
     </div>

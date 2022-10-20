@@ -850,3 +850,11 @@ footer .copyright {
 }
 
 /* Add End */
+
+/* Orders Start */
+
+.Orders #orders-container .order_tables h4{
+  padding: 35px;
+}
+
+/* Orders End */
