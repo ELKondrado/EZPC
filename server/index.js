@@ -45,9 +45,9 @@ app.post("/api/insert",(req,res) => {
 app.post("/api/insertTableProduct",(req,res) =>{
     const tableName = req.body.tableName;
 
-    const sqlCreateTable = "CREATE TABLE `crud`.`?` (`id` INT NOT NULL AUTO_INCREMENT,`productName` VARCHAR(100) NOT NULL,`productImage` VARCHAR(100) NOT NULL,`productPrice` DOUBLE NOT NULL,`productQuantity` INT NOT NULL,PRIMARY KEY (`id`));";
+    const sqlCreateTable = "CREATE TABLE ?? (`id` INT NOT NULL AUTO_INCREMENT,`productName` VARCHAR(100) NOT NULL,`productImage` VARCHAR(100) NOT NULL,`productPrice` DOUBLE NOT NULL,`productQuantity` INT NOT NULL,PRIMARY KEY (`id`));";
     db.query(sqlCreateTable,[tableName],(err,result)=> {
-        console.log(err);
+        console.log(err);  
     })
 })
 
@@ -57,16 +57,40 @@ app.post("/api/insertOrder",(req,res) => {
     const productsImages = req.body.productImage;
     const productsPrices = req.body.productPrice;
     const productQuantity = req.body.productQuantity;
-    const sqlInsertOrder = "INSERT INTO `?` (`productName`, `productImage`, `productPrice`,`productQuantity`) VALUES (?,?,?,?);";
-    db.query(sqlInsertOrder,[tableNames,productsNames,productsImages,productsPrices,productQuantity],(err,result) => {
-        console.log(err)
-    })
+ 
+
+    if(productsNames!=undefined)
+    {
+        const sqlInsertOrder = "INSERT INTO ?? (`productName`, `productImage`, `productPrice`, `productQuantity`) VALUES (?,?,?,?);";
+        db.query(sqlInsertOrder,[tableNames,productsNames,productsImages,productsPrices,productQuantity],(err,result) => {
+            console.log(err)
+        })
+    }
 })
 
 app.post("/api/insertTable",(req,res) =>{
-    const sqlInsertTable = "INSERT INTO `crud`. `tables` (`table`) VALUES ('table');";
-    db.query(sqlInsertTable,(err,result)=> {
+    const tableName = req.body.tableName;
+    const tableData = req.body.tableData;
+    const sqlInsertTable = "INSERT INTO ?? (`table`) VALUES (?);";
+    db.query(sqlInsertTable,[tableName,tableData],(err,result)=> {
         console.log(err);
+    })
+})
+
+
+app.post("/api/insertTableName",(req,res) =>{
+    const OrderTableName = req.body.orderTableName;
+    const sqlTableName = "SELECT * FROM ??";
+    db.query(sqlTableName,[OrderTableName],(err,result) => {
+        res.send(result);
+    })
+})
+
+app.get("/api/getTableName",(req,res) =>{
+    const tableName = req.query.name;
+    const sqlTableName = "SELECT * FROM ??";
+    db.query(sqlTableName,[tableName],(err,result) => {
+        res.send(result)
     })
 })
 

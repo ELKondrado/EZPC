@@ -3,14 +3,14 @@ import Axios from 'axios'
 import { json } from "react-router-dom"
 import { urng } from 'urn-lib'
 
-let ok=0;
 function Cart(){
-    const [productNames, setProductNames] = useState([])
-    const [productImages, setProductImages] = useState([])
-    const [productPrices, setProductPrices] = useState([])
-    const [productQuantity, setProductQuantity] = useState([])
-    const [tables,setTables] = useState([])
+    let pNames=[];
+    let pImages=[];
+    let pPrices=[];
+    let pQuantity=[];
+    const [tables,setTables] = useState([]);
     let tableName,tableId;
+
     function pay(){
         localStorage.clear();
         window.open("http://localhost:3000/pay", "width=200, height=100");
@@ -24,10 +24,7 @@ function Cart(){
         let length = localStorage.getItem("cartNumbers");
         length = parseInt(length);
         
-        let pNames=[];
-        let pImages=[];
-        let pPrices=[];
-        let pQuantity=[];
+        
         let i=0;
         Object.values(cartItems).map((item) => {
             let pp = parseFloat(item.productPrice);
@@ -43,10 +40,6 @@ function Cart(){
             pQuantity[i]=pq;
             i++;
           });
-        setProductNames(pNames); 
-        setProductImages(pImages);  
-        setProductPrices(pPrices);
-        setProductQuantity(pQuantity);
         submitOrder();
     }
 
@@ -59,34 +52,40 @@ function Cart(){
 
         if(tables.length!=0)
         {
-            Axios.post("http://localhost:3001/api/insertTable",{}).then(()=>{})
-
-            Axios.get('http://localhost:3001/api/getTables').then((response) => {
-                setTables(response.data);
-            })
-
-            Object.values(tables).map((item) => {
-                tableName = item.table;
-                tableId = item.id;
-            });
+            Axios.post("http://localhost:3001/api/insertTable",{
+                tableName : "tables",
+                tableData : "table"
+            }).then(()=>{})
+            
+            tableName = tables[tables.length-1].table;
+            tableId = tables[tables.length-1].id;
 
             Axios.post("http://localhost:3001/api/insertTableProduct",
             {
                 tableName : tableName + tableId,
             })
 
-            for(let i=0;i<=productNames.length;i++){
-                Axios.post("http://localhost:3001/api/insertOrder",
+            let tableID = tableName + tableId;
+            
+            setTimeout(f,500)
+
+            function f(){
+                for(let i=0;i<pNames.length;i++)
                 {
-                    tableName : tableName + tableId,
-                    productName : productNames[i],
-                    productImage : productImages[i],
-                    productPrice : productPrices[i],
-                    productQuantity : productQuantity[i],
-                }).then(()=>{
-                
-                })
+                    Axios.post("http://localhost:3001/api/insertOrder",
+                    {
+                        tableName : tableID,
+                        productName : pNames[i],
+                        productImage : pImages[i],
+                        productPrice : pPrices[i],
+                        productQuantity : pQuantity[i],
+                    }).then(()=>{
+                    
+                    })
+                }
             }
+            
+        
 
             setTimeout(pay,500)
         }      
