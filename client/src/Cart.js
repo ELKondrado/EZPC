@@ -11,6 +11,17 @@ function Cart(){
         window.location.reload();
     }
 
+    function signUp(){
+        let input = document.querySelector(".email");
+        let inputValue = input.value;
+        Axios.post('http://localhost:3001/api/insertEmail',
+        {
+            email : inputValue
+        });
+        alert("Email added successfully");
+        input.value = ``
+    }
+
     function recordOrders()
     {
         let cartItems = localStorage.getItem("productsInCart");
@@ -115,8 +126,8 @@ function Cart(){
                 <p>Get E-mail updates about lastest shop and <span> special offers.</span></p>
             </div>
             <div className="form">
-                <input type="text" placeholder="Your E-mail address"/>
-                <button className="normal">Sign Up</button>
+                <input className="email" type="text" placeholder="Your E-mail address"/>
+                <button className="normal signUp" onClick={signUp}>Sign Up</button>
             </div>
         </section>
 

@@ -97,6 +97,14 @@ app.get("/api/getProducts",(req,res) =>{
     })
 })
 
+app.post("/api/insertEmail",(req,res) =>{
+    const email = req.body.email;
+    const sqlInsert = "INSERT INTO newsletters (email) VALUES (?);"
+    db.query(sqlInsert,[email],(err,result) => {
+        console.log(err);
+    })
+})
+
 app.get("/",(req,res) => {})
 
 app.listen(3001,() =>{

@@ -98,7 +98,7 @@ function Product(){
         </div>
         <div className="form">
             <input type="text" placeholder="Your E-mail address"/>
-            <button className="normal">Sign Up</button>
+            <button className="normal signUp">Sign Up</button>
         </div>
     </section>
 
