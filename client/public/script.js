@@ -57,11 +57,9 @@ function cartNumbers(product) {
 function setItems(product) {
   let cartItems = localStorage.getItem("productsInCart");
   cartItems = JSON.parse(cartItems);
-  console.log(product)
   if (cartItems != null) {
     if (cartItems[product.productName] == undefined) {
       product.inCart = 1;
-      product.id=0;
       cartItems = {
         ...cartItems,
         [product.productName]: product,
@@ -72,7 +70,6 @@ function setItems(product) {
     }
   } else {
     product.inCart = 1;
-    product.id=0;
     cartItems = {
       [product.productName]: product,
     };

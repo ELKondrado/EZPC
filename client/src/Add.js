@@ -43,7 +43,7 @@ function Add(){
 
                 <button className="submitBtn" onClick={submitProduct}>Submit</button>
             </div>
-            
+
         </div>
     );
 };
