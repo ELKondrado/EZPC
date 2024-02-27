@@ -1,4 +1,4 @@
-# Computer Components Shop
+# EZPC
 
 Welcome to EZPC, an eCommerce website for purchasing computer components.
 
